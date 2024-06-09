@@ -86,17 +86,25 @@ fun App() {
         Box(modifier = Modifier.fillMaxSize()) {
             for (i in 20 downTo 0) {
                 val isVisible = remember { mutableStateOf(false) }
+                val isTransitionStarted = remember { mutableStateOf(false) }
+                val translationXValue by animateFloatAsState(
+                    targetValue = if (isTransitionStarted.value) -20f * i else 0f,
+                    animationSpec = tween(durationMillis = 300)
+                )
                 val translationYValue by animateFloatAsState(
                     targetValue = if (isVisible.value) 0f else 1000f,
                     animationSpec = tween(durationMillis = 500)
                 )
+
                 val alphaValue by animateFloatAsState(
                     targetValue = if (isVisible.value) 1f else 0f,
                     animationSpec = tween(durationMillis = 500)
                 )
                 LaunchedEffect(i) {
-                    delay(200L * i)   // Delay each card by 200 milliseconds
+                    delay(60L * i)   // Delay each card by 200 milliseconds
                     isVisible.value = true
+                    delay(200L)
+                    isTransitionStarted.value = true
                 }
 
                 Image(
@@ -106,15 +114,13 @@ fun App() {
                         .height(200.dp)
                         .width(180.dp)
                         .graphicsLayer {
-                            translationX = -20f * i
+                            translationX = translationXValue
                             translationY = translationYValue
                             alpha = alphaValue
                         }, contentDescription = null
                 )
             }
         }
-
-
     }
 }
 

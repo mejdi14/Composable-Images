@@ -1,20 +1,11 @@
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +16,6 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 import composableimages.composeapp.generated.resources.Res
-import composableimages.composeapp.generated.resources.compose_multiplatform
 import composableimages.composeapp.generated.resources.side1
 import composableimages.composeapp.generated.resources.side10
 import composableimages.composeapp.generated.resources.side13
@@ -80,31 +70,81 @@ fun App() {
             Res.drawable.side30,
             Res.drawable.side31,
             Res.drawable.side32,
-            Res.drawable.side33,
+            Res.drawable.side20,
+            Res.drawable.side16,
+            Res.drawable.side14,
+            Res.drawable.side10,
+            Res.drawable.side8,
+            Res.drawable.side6,
+            Res.drawable.side4,
+            Res.drawable.side4,
+            Res.drawable.side4,
         )
 
         Box(modifier = Modifier.fillMaxSize()) {
-            for (i in 20 downTo 0) {
+            for (i in 29 downTo 0) {
                 val isVisible = remember { mutableStateOf(false) }
                 val isTransitionStarted = remember { mutableStateOf(false) }
+                val isRotationStarted = remember { mutableStateOf(false) }
                 val translationXValue by animateFloatAsState(
-                    targetValue = if (isTransitionStarted.value) -20f * i else 0f,
+                    targetValue = when {
+                        isRotationStarted.value -> when {
+                            i > 22 -> 0f + ((i - 29) * (180f / 7))
+                            i in 15..22 -> -180f + ((i - 22) * (180f / 7))
+                            i in 7..14 -> 0f - ((i - 7) * (180f / 7))
+                            i in 0..6 -> 180f - (i * (180f / 7))
+                            else -> 0f
+                        }
+
+                        isTransitionStarted.value -> -7f * i
+                        else -> 0f
+                    },
                     animationSpec = tween(durationMillis = 300)
                 )
                 val translationYValue by animateFloatAsState(
-                    targetValue = if (isVisible.value) 0f else 1000f,
-                    animationSpec = tween(durationMillis = 500)
+                    targetValue = when {
+                        isRotationStarted.value -> when {
+                            i > 22 -> 180f - (i - 29) * -33f
+                            i in 15..22 -> (i - 22) * 33f
+                            i in 7..14 -> -180 + ((i - 7) * 33f)
+                            i in 0..6 -> i * -30f
+
+                            else -> 0f
+                        }
+
+                        isVisible.value -> 0f
+                        else -> 400f
+                    },
+                    animationSpec = tween(durationMillis = 400)
+                )
+
+                val rotationValue by animateFloatAsState(
+                    targetValue = if (isRotationStarted.value) when {
+                        i > 22 -> -90 - (i * (90f / 7))
+                        i in 15..22 -> -90 - (i * (90f / 7))
+                        i in 7..14 -> -180 - ((i - 7) * (90f / 7))
+                        i in 0..6 -> -90 - (i * (90f / 7))
+                        else -> 0f
+                    } else 0f,
+                    animationSpec = tween(durationMillis = 400)
                 )
 
                 val alphaValue by animateFloatAsState(
-                    targetValue = if (isVisible.value) 1f else 0f,
-                    animationSpec = tween(durationMillis = 500)
+                    targetValue = if (isTransitionStarted.value) 1f else 0.7f,
+                    animationSpec = tween(durationMillis = 300)
+                )
+
+                val scaleValue by animateFloatAsState(
+                    targetValue = if (isTransitionStarted.value) 1f else 0.5f,
+                    animationSpec = tween(durationMillis = 300)
                 )
                 LaunchedEffect(i) {
-                    delay(60L * i)   // Delay each card by 200 milliseconds
+                    delay(50L * i)   // Delay each card by 200 milliseconds
                     isVisible.value = true
-                    delay(200L)
+                    delay(100L)
                     isTransitionStarted.value = true
+                    delay(1000L)
+                    isRotationStarted.value = true
                 }
 
                 Image(
@@ -117,11 +157,11 @@ fun App() {
                             translationX = translationXValue
                             translationY = translationYValue
                             alpha = alphaValue
+                            scaleX = scaleValue
+                            rotationZ = rotationValue
                         }, contentDescription = null
                 )
             }
         }
     }
 }
-
-

@@ -91,8 +91,8 @@ fun App() {
                         isRotationStarted.value -> when {
                             i > 22 -> 0f + ((i - 29) * (180f / 7))
                             i in 15..22 -> -180f + ((i - 22) * (180f / 7))
-                            i in 7..14 -> 0f - ((i - 7) * (180f / 7))
-                            i in 0..6 -> 180f - (i * (180f / 7))
+                            i in 7..14 -> 0f - ((i - 7) * (280f / 7))
+                            i in 0..6 -> 280f - (i * (280f / 7))
                             else -> 0f
                         }
 
@@ -104,9 +104,9 @@ fun App() {
                 val translationYValue by animateFloatAsState(
                     targetValue = when {
                         isRotationStarted.value -> when {
-                            i > 22 -> 180f - (i - 29) * -33f
-                            i in 15..22 -> (i - 22) * 33f
-                            i in 7..14 -> -180 + ((i - 7) * 33f)
+                            i > 22 -> 180f - ((i - 29) * 30f)
+                            i in 15..22 -> 30f + ((i - 22) * 30f)
+                            i in 7..14 -> -180 + ((i - 7) * 30f)
                             i in 0..6 -> i * -30f
 
                             else -> 0f
@@ -120,11 +120,11 @@ fun App() {
 
                 val rotationValue by animateFloatAsState(
                     targetValue = if (isRotationStarted.value) when {
-                        i > 22 -> -90 - (i * (90f / 7))
-                        i in 15..22 -> -90 - (i * (90f / 7))
+                        i > 22 -> -360 - ((i - 29) * (90f / 7))
+                        i in 15..22 -> -270 - ((i - 22) * (90f / 7))
                         i in 7..14 -> -180 - ((i - 7) * (90f / 7))
                         i in 0..6 -> -90 - (i * (90f / 7))
-                        else -> 0f
+                        else -> -0f
                     } else 0f,
                     animationSpec = tween(durationMillis = 400)
                 )

@@ -59,6 +59,7 @@ fun App() {
             Res.drawable.side14,
             Res.drawable.side15,
             Res.drawable.side16,
+            Res.drawable.side14,
             Res.drawable.side17,
             Res.drawable.side18,
             Res.drawable.side19,
@@ -69,10 +70,13 @@ fun App() {
             Res.drawable.side25,
             Res.drawable.side30,
             Res.drawable.side31,
+            Res.drawable.side25,
             Res.drawable.side32,
             Res.drawable.side20,
             Res.drawable.side16,
             Res.drawable.side14,
+            Res.drawable.side20,
+            Res.drawable.side10,
             Res.drawable.side10,
             Res.drawable.side8,
             Res.drawable.side6,
@@ -82,17 +86,17 @@ fun App() {
         )
 
         Box(modifier = Modifier.fillMaxSize()) {
-            for (i in 29 downTo 0) {
+            for (i in 28 downTo 0) {
                 val isVisible = remember { mutableStateOf(false) }
                 val isTransitionStarted = remember { mutableStateOf(false) }
                 val isRotationStarted = remember { mutableStateOf(false) }
                 val translationXValue by animateFloatAsState(
                     targetValue = when {
                         isRotationStarted.value -> when {
-                            i > 22 -> 0f + ((i - 29) * (180f / 7))
-                            i in 15..22 -> -180f + ((i - 22) * (180f / 7))
-                            i in 7..14 -> 0f - ((i - 7) * (280f / 7))
-                            i in 0..6 -> 280f - (i * (280f / 7))
+                            i > 22 -> 0f + ((i - 22) * (360f / 7))
+                            i in 15..22 -> -360f + ((i - 15) * (360f / 7))
+                            i in 7..14 -> 0f - ((i - 7) * (360f / 7))
+                            i in 0..6 -> 360f - (i * (360f / 7))
                             else -> 0f
                         }
 
@@ -104,11 +108,14 @@ fun App() {
                 val translationYValue by animateFloatAsState(
                     targetValue = when {
                         isRotationStarted.value -> when {
-                            i > 22 -> 180f - ((i - 29) * 30f)
-                            i in 15..22 -> 30f + ((i - 22) * 30f)
-                            i in 7..14 -> -180 + ((i - 7) * 30f)
-                            i in 0..6 -> i * -30f
-
+                            i > 22 -> 360 - ((i - 21) * 60f)
+                            i == 22 -> 360f
+                            i in 15..21 -> 0f + ((i - 14) * 60f)
+                            i == 14 -> 0f
+                            i in 8..13 -> -420f + ((i - 7) * 60f)
+                            i == 7 -> -420f
+                            i in 1..6 -> i   * -60f
+                            i == 0 -> 0f
                             else -> 0f
                         }
 
@@ -120,10 +127,14 @@ fun App() {
 
                 val rotationValue by animateFloatAsState(
                     targetValue = if (isRotationStarted.value) when {
-                        i > 22 -> -360 - ((i - 29) * (90f / 7))
-                        i in 15..22 -> -270 - ((i - 22) * (90f / 7))
-                        i in 7..14 -> -180 - ((i - 7) * (90f / 7))
-                        i in 0..6 -> -90 - (i * (90f / 7))
+                        i > 22 -> -360 - ((i - 21) * (90f / 6))
+                        i == 22 -> -360f
+                        i in 15..21 -> -270 - ((i - 14) * (90f / 7))
+                        i == 14 -> -270f
+                        i in 8..13 -> -180 - ((i - 7) * (90f / 7))
+                        i == 7 -> -180f
+                        i in 1..6 -> -90 - (i * (90f / 7))
+                        i == 0 -> -90f
                         else -> -0f
                     } else 0f,
                     animationSpec = tween(durationMillis = 400)
@@ -151,8 +162,8 @@ fun App() {
                     painter = painterResource(listImages[i]),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.align(Alignment.Center)
-                        .height(200.dp)
-                        .width(180.dp)
+                        .height(160.dp)
+                        .width(120.dp)
                         .graphicsLayer {
                             translationX = translationXValue
                             translationY = translationYValue

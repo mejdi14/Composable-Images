@@ -132,7 +132,7 @@ fun App() {
                     animationSpec = tween(durationMillis = 300)
                 )
                 LaunchedEffect(i) {
-                    delay(50L * i)   // Delay each card by 200 milliseconds
+                    delay(50L * i)
                     isVisible.value = true
                     delay(100L)
                     isTransitionStarted.value = true
